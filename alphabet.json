@@ -1,0 +1,37 @@
+{
+  "nodes": [
+    {"id": "Alphabet", "group": 4, "value": 535, "info": ""},
+    {"id": "Calico", "group": 2, "value": 3, "info": ""},
+    {"id": "GoogleX", "group": 2, "value": 1, "info": ""},
+    {"id": "Fiber", "group": 2, "value": 1, "info": ""},
+    {"id": "Google Ventures", "group": 2, "value": 1, "info": ""},
+    {"id": "Nest", "group": 3, "value": 3.2, "info": ""},
+    {"id": "Sidewalk Labs", "group": 2, "value": 1, "info": ""},
+    {"id": "Google Capital", "group": 2, "value": 1, "info": ""},
+    {"id": "Verily", "group": 2, "value": 1, "info": ""},
+    {"id": "Google", "group": 2, "value": 1, "info": ""},
+    {"id": "Android", "group": 2, "value": 1, "info": ""},
+    {"id": "Search", "group": 2, "value": 1, "info": ""},
+    {"id": "Youtube", "group": 3, "value": 80, "info": ""},
+    {"id": "Apps", "group": 2, "value": 1, "info": ""},
+    {"id": "Maps", "group": 2, "value": 1, "info": ""},
+    {"id": "Ads", "group": 2, "value": 1, "info": ""}
+  ],
+  "links": [
+    {"source": "Calico", "target": "Alphabet", "thick": 15, "distance":200},
+    {"source": "GoogleX", "target": "Alphabet", "thick": 15, "distance":200},
+    {"source": "Fiber", "target": "Alphabet", "thick": 15, "distance":200},
+    {"source": "Google Ventures", "target": "Alphabet", "thick": 15, "distance":200},
+    {"source": "Nest", "target": "Alphabet", "thick": 15, "distance":200},
+    {"source": "Sidewalk Labs", "target": "Alphabet", "thick": 15, "distance":200},
+    {"source": "Google Capital", "target": "Alphabet", "thick": 15, "distance":200},
+    {"source": "Verily", "target": "Alphabet", "thick": 15, "distance":200},
+    {"source": "Google", "target": "Alphabet", "thick": 15, "distance":400},
+    {"source": "Android", "target": "Google", "thick": 5, "distance":50},
+    {"source": "Search", "target": "Google", "thick": 5, "distance":50},
+    {"source": "Youtube", "target": "Google", "thick": 5, "distance":50},
+    {"source": "Apps", "target": "Google", "thick": 5, "distance":50},
+    {"source": "Maps", "target": "Google", "thick": 5, "distance":50},
+    {"source": "Ads", "target": "Google", "thick": 5, "distance":50}
+  ]
+}
