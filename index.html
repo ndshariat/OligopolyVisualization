@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 <style>
+    
     .axis path,
     .axis line {
         fill: none;
@@ -18,11 +20,13 @@
         pointer-events: all;
     }
 
-    .cells :hover circle {
+    /*.cells :hover circle {
         fill: green;
-    }
+    }*/
     
     .tooltip {	
+        font-family: 'Montserrat', sans-serif;
+
         position: absolute;			
         text-align: center;			
         width: 170px;					
@@ -37,7 +41,8 @@
     }
     
     body{
-        font-family: sans-serif;
+        font-family: 'Montserrat', sans-serif;
+
         background: #aaa;
     }
     
@@ -53,6 +58,7 @@
     h4{
         padding-left:8em;
         font-size:11px;
+        font-weight: 100;
     }
     p{
         padding: 20px;
@@ -91,7 +97,7 @@
 <body>
     <br>
     <h1> Oligopoly in Social Media </h1>
-    <p>Many are afraid that too much of the tech industry is controlled by too few companies. When this happens consumers suffer from a lack of tech variety and advancement, and it further entrenches the status quo. This market state of oligopoly is readily apparent in global social media usage, especially when the mask of subsidiaries is lifted, and the market leaders like Facebook and TencentQQ dominating power over all competition is revealed.  </p>
+    <p>Many are afraid that too much of the tech industry is controlled by too few companies. When oligopolies like this occur, consumers suffer from a lack of tech variety and advancement, and it further entrenches the status quo through barriers to entry.<sup><a href="http://www.economicsonline.co.uk/Business_economics/Oligopoly.html">[1]</a></sup>. This market state of oligopoly is readily apparent in the social media market, especially when the mask of subsidiaries is lifted. Consolidating their subsidiaries reveals that the market leaders Facebook and TencentQQ both have more active users than the following top 10 companies combined.  </p>
 
 <!--<form>
   <label><input type="radio" name="build" value="Segmented" checked> Segmented</label>
@@ -104,6 +110,7 @@
 <h3> Segmented </h3>
 <h4> (Subsidiaries are individual nodes)</h4>
 <svg width="960" height="200" class="seg"></svg>
+<svg width="300" height="210" class="leg"></svg>
 <br>
 </div>
 <br><br><br><br>
@@ -115,7 +122,6 @@
         <br>
 </div>
 <br>
-<svg width="300" height="210" class="leg"></svg>
 
 <br><br>
     
@@ -133,7 +139,8 @@ CMPS165, Data Programming for Visualization, Fall 2016 <br><br>
      
 Files included: <br>
 index.html (contains javascript and css))<br>
-SocialMedia2.csv (data)<br><br>
+SocialMedia2.csv (data)<br>
+SocialMedia3.csv (data)<br><br>
     
     
 </body>
@@ -243,10 +250,10 @@ d3.csv("SocialMedia2.csv", type, function(error, data) {
   cell.append("path")
       .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
-  cell.append("title")
+  /*cell.append("title")
       .text(function(d) { return d.data.id + "\n"
                             + "Parent Company: " + d.data.parent + "\n"
-                            + "$"+ d.data.price + "B \n"; });
+                            + "$"+ d.data.price + "B \n"; });*/
   cell.append("text")
             .attr("font-size", "12px")
             .attr("font-family", "sans-serif")
@@ -285,7 +292,7 @@ d3.csv("SocialMedia2.csv", type, function(error, data) {
 //Setting up the margins of the tot graphic
     
 tot = d3.select(".tot"),
-    margin = {top: 40, right: 40, bottom: 40, left: 100},
+    margin = {top: 40, right: 80, bottom: 40, left: 100},
     width = tot.attr("width") - margin.left - margin.right,
     height = tot.attr("height") - margin.top - margin.bottom;
     
@@ -350,8 +357,7 @@ d3.csv("SocialMedia3.csv", type, function(error, data) {
                 .style("left", d3.event.pageX - 50 + "px")
                 .style("top", d3.event.pageY -70 + "px")
                 .style("display", "inline-block")
-                .html("<div class ='name'><b>" + d.data.id + "</b></div>\n" +
-                            "<div class ='parent'>Parent Company: " + d.data.parent + "</div>\n"
+                .html("<div class ='name'><b>" + d.data.id + "</b></div>\n"
                             + "<div class ='valuation'>$"+ d.data.price + "B</div>\n");
             console.log("first");
                 
@@ -368,10 +374,10 @@ d3.csv("SocialMedia3.csv", type, function(error, data) {
   cell2.append("path")
       .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
-  cell2.append("title")
+  /*cell2.append("title")
       .text(function(d) { return d.data.id + "\n"
                             + "Parent Company: " + d.data.parent + "\n"
-                            + "$"+ d.data.price + "B \n"; });
+                            + "$"+ d.data.price + "B \n"; });*/
   cell2.append("text")
             .attr("font-size", "12px")
             .attr("font-family", "sans-serif")
@@ -393,8 +399,7 @@ d3.csv("SocialMedia3.csv", type, function(error, data) {
                 .style("left", d3.event.pageX - 50 + "px")
                 .style("top", d3.event.pageY -70 + "px")
                 .style("display", "inline-block")
-                .html("<div class ='name'><b>" + d.data.id + "</b></div>\n" +
-                            "<div class ='parent'>Parent Company: " + d.data.parent + "</div>\n"
+                .html("<div class ='name'><b>" + d.data.id + "</b></div>\n"
                             + "<div class ='valuation'>$"+ d.data.price + "B</div>\n");
                 console.log("second");
                 
@@ -488,7 +493,7 @@ leg.append("rect")
         .attr("y", 30)
         .attr("width", 25)
         .attr("height", 25)
-        .style("fill", "#4379FF");
+        .style("fill", "rgb(31,119,180)");
 leg.append("text")
         leg.append("text")
         .attr("font-size", "12px")
@@ -502,7 +507,7 @@ leg.append("rect")
         .attr("y", 60)
         .attr("width", 25)
         .attr("height", 25)
-        .style("fill", "orange");
+        .style("fill", "rgb(255,127,14)");
 leg.append("text")
         leg.append("text")
         .attr("font-size", "12px")
@@ -516,7 +521,7 @@ leg.append("rect")
         .attr("y", 90)
         .attr("width", 25)
         .attr("height", 25)
-        .style("fill", "violet");
+        .style("fill", "rgb(148,103,189)");
 leg.append("text")
         leg.append("text")
         .attr("font-size", "12px")
@@ -530,7 +535,7 @@ leg.append("rect")
         .attr("y", 120)
         .attr("width", 25)
         .attr("height", 25)
-        .style("fill", "red");
+        .style("fill", "rgb(214,39,40)");
 leg.append("text")
         leg.append("text")
         .attr("font-size", "12px")
