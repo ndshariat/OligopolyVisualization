@@ -1,66 +1,125 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
 
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-
-.axis text{
-  font: 10px sans-serif;
-}
+    .axis text{
+        font: 10px sans-serif;
+    }
     
 
-.cells path {
-  fill: none;
-  pointer-events: all;
-}
+    .cells path {
+        fill: none;
+        pointer-events: all;
+    }
 
-.cells :hover circle {
-  fill: red;
-}
+    .cells :hover circle {
+        fill: green;
+    }
     
-.tooltip {	
-    position: absolute;			
-    text-align: center;			
-    width: 90px;					
-    height: 60px;					
-    padding: 10px;				
-    font: 12px sans-serif;		
-    background: lightsteelblue;	
-    border: 0px;		
-    border-radius: 8px;
-    opacity:0.8;
-    pointer-events: none;			
-}
+    .tooltip {	
+        position: absolute;			
+        text-align: center;			
+        width: 170px;					
+        height: 40px;					
+        padding: 10px;				
+        font: 12px sans-serif;		
+        background: lightsteelblue;	
+        border: 0px;		
+        border-radius: 8px;
+        opacity:0.8;
+        pointer-events: none;			
+    }
+    
+    body{
+        font-family: sans-serif;
+        background: #aaa;
+    }
+    
+    h1{
+        text-align: center;    
+    }
+    h2{
+        padding-left:2em;
+    }
+    h3{
+        padding-left:4em;
+    }
+    h4{
+        padding-left:8em;
+        font-size:11px;
+    }
+    p{
+        padding: 20px;
+        margin: 50px;
+        background: #ddd;
+    }
+    .name{
+       text-align: center; 
+    }
+    .parent{
+       text-align: center; 
+    }
+    .valuation{  
+        text-align: center;
+    }
+    .Segmented{
+        background: white;
+        padding: 10px;
+        padding-bottom: 20px;
+        margin: 50px;
+        margin-bottom: 20px;
+    }
+    .Total{
+        background: white;
+        padding: 10px;
+        padding-bottom: 20px;
+        margin: 50px;
+        margin-top: 20px;
+    }
+    .leg{
+        background: white;
+    }
+    
 
 </style>
 <body>
+    <br>
     <h1> Oligopoly in Social Media </h1>
-    <p>Many are afraid that too much of the tech industry is controlled by too few companies. When this happens consumers suffer from a lack of tech variety and advancement, and it further entrenches the status quo. This market state of oligopoly is readily apparent in global social media usage, especially when the mask of subsidiaries is lifted, and the true market dominators are revealed. Leading companies like Facebook and TencentQQ have a </p>
+    <p>Many are afraid that too much of the tech industry is controlled by too few companies. When this happens consumers suffer from a lack of tech variety and advancement, and it further entrenches the status quo. This market state of oligopoly is readily apparent in global social media usage, especially when the mask of subsidiaries is lifted, and the market leaders like Facebook and TencentQQ dominating power over all competition is revealed.  </p>
 
 <!--<form>
   <label><input type="radio" name="build" value="Segmented" checked> Segmented</label>
   <label><input type="radio" name="build" value="Total"> Total</label>
 </form>-->
+    
 <h2> Market Sector</h2>
+<div class="Segmented">
+    <br><br>
 <h3> Segmented </h3>
 <h4> (Subsidiaries are individual nodes)</h4>
 <svg width="960" height="200" class="seg"></svg>
+<br>
+</div>
+<br><br><br><br>
+<div class="Total">
+        <br><br>
 <h3> Total </h3>
 <h4> (Subsidiaries are added into parent companies active user count)</h4>
 <svg width="960" height="200" class="tot"></svg>
+        <br>
+</div>
 <br>
 <svg width="300" height="210" class="leg"></svg>
-</body>
-<body>
 
 <br><br>
     
-<a href="/sources.html">Sources</a>
+<a href="Sources/sources.html">Sources</a>
     
 <br><br>
 
@@ -91,7 +150,7 @@ var leg = d3.select(".leg");
 //Setting up the margins of the SVG graphic
     
 var seg = d3.select(".seg"),
-    margin = {top: 40, right: 40, bottom: 40, left: 40},
+    margin = {top: 40, right: 40, bottom: 40, left: 100},
     width = seg.attr("width") - margin.left - margin.right,
     height = seg.attr("height") - margin.top - margin.bottom;
     
@@ -166,9 +225,9 @@ d3.csv("SocialMedia2.csv", type, function(error, data) {
                 .style("left", d3.event.pageX - 50 + "px")
                 .style("top", d3.event.pageY -70 + "px")
                 .style("display", "inline-block")
-                .html("Name: " + d.data.id + "\n"
-                            + "Parent: " + d.data.parent + "\n"
-                            + "Valuation: "+ formatValue(d.data.value) + "\n");
+                .html("<div class ='name'><b>" + d.data.id + "</b></div>\n" +
+                            "<div class ='parent'>Parent Company: " + d.data.parent + "</div>\n"
+                            + "<div class ='valuation'>$"+ d.data.price + "B</div>\n");
             console.log("first");
                 
         })
@@ -185,9 +244,9 @@ d3.csv("SocialMedia2.csv", type, function(error, data) {
       .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
   cell.append("title")
-      .text(function(d) { return "Name: " + d.data.id + "\n"
-                            + "Parent: " + d.data.parent + "\n"
-                            + "Valuation: "+ formatValue(d.data.value) + "\n"; });
+      .text(function(d) { return d.data.id + "\n"
+                            + "Parent Company: " + d.data.parent + "\n"
+                            + "$"+ d.data.price + "B \n"; });
   cell.append("text")
             .attr("font-size", "12px")
             .attr("font-family", "sans-serif")
@@ -209,9 +268,9 @@ d3.csv("SocialMedia2.csv", type, function(error, data) {
                 .style("left", d3.event.pageX - 50 + "px")
                 .style("top", d3.event.pageY -70 + "px")
                 .style("display", "inline-block")
-                .html("Name: " + d.data.id + "\n"
-                            + "Parent: " + d.data.parent + "\n"
-                            + "Valuation: "+ formatValue(d.data.value) + "\n");
+                .html("<div class ='name'><b>" + d.data.id + "</b></div>\n" +
+                            "<div class ='parent'>Parent Company: " + d.data.parent + "</div>\n"
+                            + "<div class ='valuation'>$"+ d.data.price + "B</div>\n");
                 console.log("second");
                 
         })
@@ -226,7 +285,7 @@ d3.csv("SocialMedia2.csv", type, function(error, data) {
 //Setting up the margins of the tot graphic
     
 tot = d3.select(".tot"),
-    margin = {top: 40, right: 40, bottom: 40, left: 40},
+    margin = {top: 40, right: 40, bottom: 40, left: 100},
     width = tot.attr("width") - margin.left - margin.right,
     height = tot.attr("height") - margin.top - margin.bottom;
     
@@ -248,7 +307,7 @@ g = tot.append("g")
         group: integer based on associated company (1 for facebook, 7 for TencentQQ...)
         price: market cap for public parent company, valuation/accquisiton for subsidiaries/smaller companies
     */
-d3.csv("SocialTot.csv", type, function(error, data) {
+d3.csv("SocialMedia3.csv", type, function(error, data) {
   if (error) throw error;
     
     
@@ -291,9 +350,9 @@ d3.csv("SocialTot.csv", type, function(error, data) {
                 .style("left", d3.event.pageX - 50 + "px")
                 .style("top", d3.event.pageY -70 + "px")
                 .style("display", "inline-block")
-                .html("Name: " + d.data.id + "\n"
-                            + "Parent: " + d.data.parent + "\n"
-                            + "Valuation: "+ formatValue(d.data.value) + "\n");
+                .html("<div class ='name'><b>" + d.data.id + "</b></div>\n" +
+                            "<div class ='parent'>Parent Company: " + d.data.parent + "</div>\n"
+                            + "<div class ='valuation'>$"+ d.data.price + "B</div>\n");
             console.log("first");
                 
         })
@@ -310,9 +369,9 @@ d3.csv("SocialTot.csv", type, function(error, data) {
       .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
   cell2.append("title")
-      .text(function(d) { return "Name: " + d.data.id + "\n"
-                            + "Parent: " + d.data.parent + "\n"
-                            + "Valuation: "+ formatValue(d.data.value) + "\n"; });
+      .text(function(d) { return d.data.id + "\n"
+                            + "Parent Company: " + d.data.parent + "\n"
+                            + "$"+ d.data.price + "B \n"; });
   cell2.append("text")
             .attr("font-size", "12px")
             .attr("font-family", "sans-serif")
@@ -334,9 +393,9 @@ d3.csv("SocialTot.csv", type, function(error, data) {
                 .style("left", d3.event.pageX - 50 + "px")
                 .style("top", d3.event.pageY -70 + "px")
                 .style("display", "inline-block")
-                .html("Name: " + d.data.id + "\n"
-                            + "Parent Company: " + d.data.parent + "\n"
-                            + "Valuation: $"+ formatValue(d.data.value) + "\n");
+                .html("<div class ='name'><b>" + d.data.id + "</b></div>\n" +
+                            "<div class ='parent'>Parent Company: " + d.data.parent + "</div>\n"
+                            + "<div class ='valuation'>$"+ d.data.price + "B</div>\n");
                 console.log("second");
                 
         })
@@ -429,7 +488,7 @@ leg.append("rect")
         .attr("y", 30)
         .attr("width", 25)
         .attr("height", 25)
-        .style("fill", "blue");
+        .style("fill", "#4379FF");
 leg.append("text")
         leg.append("text")
         .attr("font-size", "12px")
@@ -457,7 +516,7 @@ leg.append("rect")
         .attr("y", 90)
         .attr("width", 25)
         .attr("height", 25)
-        .style("fill", "purple");
+        .style("fill", "violet");
 leg.append("text")
         leg.append("text")
         .attr("font-size", "12px")
