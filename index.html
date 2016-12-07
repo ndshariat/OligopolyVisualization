@@ -2,130 +2,67 @@
 <meta charset="utf-8">
 <style>
 
-.links line {
-  stroke: #999;
-  stroke-opacity: 0.6;
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
 }
 
-.nodes circle {
-  stroke: #fff;
-  stroke-width: 1.5px;
+.axis text{
+  font: 10px sans-serif;
 }
- 
-p{
-  background-color: #ccc;
-  margin: 40px;
-  padding: 20px;
- }
+    
 
-/*Styling for the tooltip
-  CURRENTLY NOT APPLYING */
+.cells path {
+  fill: none;
+  pointer-events: all;
+}
+
+.cells :hover circle {
+  fill: red;
+}
+    
 .tooltip {	
     position: absolute;			
     text-align: center;			
-    width: 60px;					
-    height: 28px;					
-    padding: 2px;				
+    width: 90px;					
+    height: 60px;					
+    padding: 10px;				
     font: 12px sans-serif;		
     background: lightsteelblue;	
     border: 0px;		
-    border-radius: 8px;			
+    border-radius: 8px;
+    opacity:0.8;
     pointer-events: none;			
 }
 
 </style>
-<svg width="960" height="600"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script>
-
-var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
-
-var color = d3.scaleOrdinal(d3.schemeCategory20);
-
-var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink().id(function(d) { return d.id; }))
-    .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2))
-    //sets collision to avoid circle overlapping 
-    .force("collide", d3.forceCollide(function(d) {return Math.sqrt(d.value)*6 }));
-
-d3.json("alphabet.json", function(error, graph) {
-  if (error) throw error;
-
-  var link = svg.append("g")
-        .attr("class", "links")
-        .selectAll("line")
-        .data(graph.links)
-    .enter().append("line")
-        .attr("stroke-width", function(d) { return Math.sqrt(d.thick); });
-
-  var node = svg.append("g")
-        .attr("class", "nodes")
-        .selectAll("circle")
-        .data(graph.nodes)
-    .enter().append("circle")
-        //Here is where the radius of the circle is set based on the market cap of that individual node(valuation)
-        .attr("r", function(d) { return Math.sqrt(d.value)*5; }) 
-        //Color is set for the company
-        .attr("fill", function(d) { return color(d.group); })
-        .call(d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended));
-
-  //Setting hover-over info (tooltip)
-  node.append("title")
-    .attr("class", "tooltip")
-    .text(function(d) { 
-      return "Name: "+d.id +"\n"
-            +"Value: $" +d.value + " Billion \n"
-            +d.info; });
-
-  simulation
-    .nodes(graph.nodes)
-        .on("tick", ticked);
-
-  simulation.force("link")
-      .links(graph.links)
-      //sets distance of links between nodes
-      .distance(function(d) { return d.distance/2; });
-
-  function ticked() {
-    link
-        .attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-  }
-});
-
-function dragstarted(d) {
-  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-  d.fx = d.x;
-  d.fy = d.y;
-}
-
-function dragged(d) {
-  d.fx = d3.event.x;
-  d.fy = d3.event.y;
-}
-
-function dragended(d) {
-  if (!d3.event.active) simulation.alphaTarget(0);
-  d.fx = null;
-  d.fy = null;
-}
-
-</script>
-
 <body>
-<p>
+    <h1> Oligopoly in Social Media </h1>
+    <p>Many are afraid that too much of the tech industry is controlled by too few companies. When this happens consumers suffer from a lack of tech variety and advancement, and it further entrenches the status quo. This market state of oligopoly is readily apparent in global social media usage, especially when the mask of subsidiaries is lifted, and the true market dominators are revealed. Leading companies like Facebook and TencentQQ have a </p>
+
+<!--<form>
+  <label><input type="radio" name="build" value="Segmented" checked> Segmented</label>
+  <label><input type="radio" name="build" value="Total"> Total</label>
+</form>-->
+<h2> Market Sector</h2>
+<h3> Segmented </h3>
+<h4> (Subsidiaries are individual nodes)</h4>
+<svg width="960" height="200" class="seg"></svg>
+<h3> Total </h3>
+<h4> (Subsidiaries are added into parent companies active user count)</h4>
+<svg width="960" height="200" class="tot"></svg>
+<br>
+<svg width="300" height="210" class="leg"></svg>
+</body>
+<body>
+
+<br><br>
+    
+<a href="/sources.html">Sources</a>
+    
+<br><br>
 
 Created by: <br>
 
@@ -136,16 +73,428 @@ Created for: <br>
 CMPS165, Data Programming for Visualization, Fall 2016 <br><br>
      
 Files included: <br>
-PrototypeWeb.html (alias index.html in repository)<br>
-alphabet.json<br><br>
+index.html (contains javascript and css))<br>
+SocialMedia2.csv (data)<br><br>
     
-Data sources:<br>
-<a href="https://en.wikipedia.org/wiki/Alphabet_Inc.#/media/File:Alphabet_Chart-vector.svg"> Alphabet Subsidiary structure </a><br><br>
-
-Code sources:<br>
-<a href="https://bl.ocks.org/mbostock/533daf20348023dfdd76"> Link Nodes by Name </a><br>
-<a href="https://bl.ocks.org/mbostock/ad70335eeef6d167bc36fd3c04378048"> Force Dragging III</a><br>
-<a href="https://bl.ocks.org/mbostock/4062045">Force-Directed Graph</a><br>
-<a href="http://bl.ocks.org/mbostock/1212197">Force-Layout with Tooltips</a><br>
-  </p>
+    
 </body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+    
+//associatiing the legend svg
+var leg = d3.select(".leg");
+    
+    
+//**********************SEGMENTED CHART****************************************
+    
+//Setting up the margins of the SVG graphic
+    
+var seg = d3.select(".seg"),
+    margin = {top: 40, right: 40, bottom: 40, left: 40},
+    width = seg.attr("width") - margin.left - margin.right,
+    height = seg.attr("height") - margin.top - margin.bottom;
+    
+
+
+//Setting up the color scale for the individual nodes (category10)
+    
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+    
+
+var formatValue = d3.format(",d");
+
+//setting up the x scale width based on SVG size (only relevant scale as there is no Y axis)
+var x = d3.scaleLog()
+    .rangeRound([0, width]);
+
+//moving the SVG
+var f = seg.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    
+
+/*importing/handling of data from SocialMedia2.csv
+    categories-
+        id: name of company
+        parent: name of parent company
+        value: number of active users
+        valuet: number of total active users of parent company when adding up those of subsidiaries
+        group: integer based on associated company (1 for facebook, 7 for TencentQQ...)
+        price: market cap for public parent company, valuation/accquisiton for subsidiaries/smaller companies
+    */
+d3.csv("SocialMedia2.csv", type, function(error, data) {
+  if (error) throw error;
+    
+    
+  //setup for tooltip
+  var tooltip = d3.select("body").append("div").attr("class","tooltip");
+
+  //setting the domain of the x range
+  x.domain(d3.extent(data, function(d) { return d.value; }));
+
+  //setting up simulations x,y value and 
+  var simulation = d3.forceSimulation(data)
+      .force("x", d3.forceX(function(d) { console.log(d.value); return x(d.value); }).strength(1))
+      .force("y", d3.forceY(height / 2))
+      .force("collide", d3.forceCollide(function(d) {return Math.sqrt(d.price); }))
+      .stop();
+
+  for (var i = 0; i < 120; ++i) simulation.tick();
+
+  f.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(20, ".0s"));
+
+  var cell = f.append("g")
+      .attr("class", "cells")
+    .selectAll("g").data(d3.voronoi()
+        .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.top]])
+        .x(function(d) { return d.x; })
+        .y(function(d) { return d.y; })
+      .polygons(data)).enter().append("g");
+
+  cell.append("circle")
+      .attr("r", function(d) {return Math.sqrt(d.data.price); })
+      .attr("cx", function(d) { return d.data.x; })
+      .attr("cy", function(d) { return d.data.y; })
+      .attr("fill", function(d) { return color(d.data.group); })
+      .on("click", function(d) { console.log("hey"); })
+      .on("mousemove", function(d){
+            tooltip
+                .style("left", d3.event.pageX - 50 + "px")
+                .style("top", d3.event.pageY -70 + "px")
+                .style("display", "inline-block")
+                .html("Name: " + d.data.id + "\n"
+                            + "Parent: " + d.data.parent + "\n"
+                            + "Valuation: "+ formatValue(d.data.value) + "\n");
+            console.log("first");
+                
+        })
+        .on("mouseout", function(d){ tooltip.style("display", "none");});
+     
+     
+  cell.on("click", console.log("hellow"));
+  
+  seg.on("click", console.log("hello"));
+     
+  f.on("click", console.log("hellw"));
+     
+  cell.append("path")
+      .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
+
+  cell.append("title")
+      .text(function(d) { return "Name: " + d.data.id + "\n"
+                            + "Parent: " + d.data.parent + "\n"
+                            + "Valuation: "+ formatValue(d.data.value) + "\n"; });
+  cell.append("text")
+            .attr("font-size", "12px")
+            .attr("font-family", "sans-serif")
+            .attr("font-weight", "lighter")
+            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate(480, 155)")  // text is drawn off the screen top left, move down and out and rotate
+            .text("Active Users (Millions)");
+ 
+
+    
+    cell.append("circle")
+      .attr("r", function(d) {return Math.sqrt(d.data.price); })
+      .attr("cx", function(d) { return d.data.x; })
+      .attr("cy", function(d) { return d.data.y; })
+      .attr("fill", function(d) { return color(d.data.group); })
+      .on("click", function(d) { console.log("hey"); })
+      .on("mousemove", function(d){
+            tooltip
+                .style("left", d3.event.pageX - 50 + "px")
+                .style("top", d3.event.pageY -70 + "px")
+                .style("display", "inline-block")
+                .html("Name: " + d.data.id + "\n"
+                            + "Parent: " + d.data.parent + "\n"
+                            + "Valuation: "+ formatValue(d.data.value) + "\n");
+                console.log("second");
+                
+        })
+        .on("mouseout", function(d){ tooltip.style("display", "none");});
+});   
+    
+    
+    
+//**********************TOT CHART****************************************
+  
+
+//Setting up the margins of the tot graphic
+    
+tot = d3.select(".tot"),
+    margin = {top: 40, right: 40, bottom: 40, left: 40},
+    width = tot.attr("width") - margin.left - margin.right,
+    height = tot.attr("height") - margin.top - margin.bottom;
+    
+    
+
+
+//moving the SVG
+g = tot.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    
+
+/*importing/handling of data from SocialMedia2.csv
+    categories-
+        id: name of company
+        parent: name of parent company
+        value: number of active users
+        valuet: number of total active users of parent company when adding up those of subsidiaries
+        group: integer based on associated company (1 for facebook, 7 for TencentQQ...)
+        price: market cap for public parent company, valuation/accquisiton for subsidiaries/smaller companies
+    */
+d3.csv("SocialTot.csv", type, function(error, data) {
+  if (error) throw error;
+    
+    
+  //setup for tooltip
+  var tooltip = d3.select("body").append("div").attr("class","tooltip");
+
+  //setting the domain of the x range
+  x.domain(d3.extent(data, function(d) { return d.value; }));
+
+  //setting up simulations x,y value and 
+  var simulation2 = d3.forceSimulation(data)
+      .force("x", d3.forceX(function(d) { console.log(d.value); return x(d.value); }).strength(1))
+      .force("y", d3.forceY(height / 2))
+      .force("collide", d3.forceCollide(function(d) {return Math.sqrt(d.price); }))
+      .stop();
+
+  for (var i = 0; i < 120; ++i) simulation2.tick();
+
+  g.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).ticks(20, ".0s"));
+
+  var cell2 = g.append("g")
+      .attr("class", "cells")
+    .selectAll("g").data(d3.voronoi()
+        .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.top]])
+        .x(function(d) { return d.x; })
+        .y(function(d) { return d.y; })
+      .polygons(data)).enter().append("g");
+
+  cell2.append("circle")
+      .attr("r", function(d) {return Math.sqrt(d.data.price); })
+      .attr("cx", function(d) { return d.data.x; })
+      .attr("cy", function(d) { return d.data.y; })
+      .attr("fill", function(d) { return color(d.data.group); })
+      .on("click", function(d) { console.log("hey"); })
+      .on("mousemove", function(d){
+            tooltip
+                .style("left", d3.event.pageX - 50 + "px")
+                .style("top", d3.event.pageY -70 + "px")
+                .style("display", "inline-block")
+                .html("Name: " + d.data.id + "\n"
+                            + "Parent: " + d.data.parent + "\n"
+                            + "Valuation: "+ formatValue(d.data.value) + "\n");
+            console.log("first");
+                
+        })
+        .on("mouseout", function(d){ tooltip.style("display", "none");});
+     
+     
+  cell2.on("click", console.log("hellow"));
+  
+  tot.on("click", console.log("hello"));
+     
+  g.on("click", console.log("hellw"));
+     
+  cell2.append("path")
+      .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
+
+  cell2.append("title")
+      .text(function(d) { return "Name: " + d.data.id + "\n"
+                            + "Parent: " + d.data.parent + "\n"
+                            + "Valuation: "+ formatValue(d.data.value) + "\n"; });
+  cell2.append("text")
+            .attr("font-size", "12px")
+            .attr("font-family", "sans-serif")
+            .attr("font-weight", "lighter")
+            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate(480, 155)")  // text is drawn off the screen top left, move down and out and rotate
+            .text("Active Users (Millions)");
+ 
+
+    
+    cell2.append("circle")
+      .attr("r", function(d) {return Math.sqrt(d.data.price); })
+      .attr("cx", function(d) { return d.data.x; })
+      .attr("cy", function(d) { return d.data.y; })
+      .attr("fill", function(d) { return color(d.data.group); })
+      .on("click", function(d) { console.log("hey"); })
+      .on("mousemove", function(d){
+            tooltip
+                .style("left", d3.event.pageX - 50 + "px")
+                .style("top", d3.event.pageY -70 + "px")
+                .style("display", "inline-block")
+                .html("Name: " + d.data.id + "\n"
+                            + "Parent Company: " + d.data.parent + "\n"
+                            + "Valuation: $"+ formatValue(d.data.value) + "\n");
+                console.log("second");
+                
+        })
+        .on("mouseout", function(d){ tooltip.style("display", "none");});
+});  
+    
+// first legend (circle area / valuation)
+leg.append("text")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "lighter")
+        .attr("text-anchor", "middle")  
+        .attr("transform", "translate(70, 15)")  
+        .text("Valuation/Market Cap");
+leg.append("circle")
+        .attr("r", Math.sqrt(10))
+        .attr("cx", 50)
+        .attr("cy", 33)
+        .style("fill", "#aaa");
+leg.append("text")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "lighter")
+        .attr("text-anchor", "left")  
+        .attr("transform", "translate(60, 38)")  
+        .text("$10B");
+leg.append("circle")
+        .attr("r", Math.sqrt(50))
+        .attr("cx", 50)
+        .attr("cy", 55)
+        .style("fill", "#aaa");
+leg.append("text")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "lighter")
+        .attr("text-anchor", "left") 
+        .attr("transform", "translate(65, 60)") 
+        .text("$50B");
+leg.append("circle")
+        .attr("r", Math.sqrt(100))
+        .attr("cx", 50)
+        .attr("cy", 80)
+        .style("fill", "#aaa");
+leg.append("text")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "lighter")
+        .attr("text-anchor", "left")
+        .attr("transform", "translate(68, 85)") 
+        .text("$100B");
+leg.append("circle")
+        .attr("r", Math.sqrt(250))
+        .attr("cx", 50)
+        .attr("cy", 113)
+        .style("fill", "#aaa");
+leg.append("text")
+        leg.append("text")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "lighter")
+        .attr("text-anchor", "left")
+        .attr("transform", "translate(73, 117)") 
+        .text("$250B");
+leg.append("circle")
+        .attr("r", Math.sqrt(500))
+        .attr("cx", 50)
+        .attr("cy", 157)
+        .style("fill", "#aaa");
+leg.append("text")
+        leg.append("text")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "lighter")
+        .attr("text-anchor", "left")
+        .attr("transform", "translate(82, 160)") 
+        .text("$500B");
+    
+//second legend (company / color)
+ 
+    
+leg.append("text")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "lighter")
+        .attr("text-anchor", "middle")  
+        .attr("transform", "translate(210, 15)")  
+        .text("Company Color");
+leg.append("rect")
+        .attr("x", 165)
+        .attr("y", 30)
+        .attr("width", 25)
+        .attr("height", 25)
+        .style("fill", "blue");
+leg.append("text")
+        leg.append("text")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "lighter")
+        .attr("text-anchor", "left")
+        .attr("transform", "translate(205, 47)") 
+        .text("Facebook");
+leg.append("rect")
+        .attr("x", 165)
+        .attr("y", 60)
+        .attr("width", 25)
+        .attr("height", 25)
+        .style("fill", "orange");
+leg.append("text")
+        leg.append("text")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "lighter")
+        .attr("text-anchor", "left")
+        .attr("transform", "translate(205, 77)") 
+        .text("TencentQQ");
+leg.append("rect")
+        .attr("x", 165)
+        .attr("y", 90)
+        .attr("width", 25)
+        .attr("height", 25)
+        .style("fill", "purple");
+leg.append("text")
+        leg.append("text")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "lighter")
+        .attr("text-anchor", "left")
+        .attr("transform", "translate(205, 107)") 
+        .text("Microsoft");
+leg.append("rect")
+        .attr("x", 165)
+        .attr("y", 120)
+        .attr("width", 25)
+        .attr("height", 25)
+        .style("fill", "red");
+leg.append("text")
+        leg.append("text")
+        .attr("font-size", "12px")
+        .attr("font-family", "sans-serif")
+        .attr("font-weight", "lighter")
+        .attr("text-anchor", "left")
+        .attr("transform", "translate(205, 137)") 
+        .text("Other");
+    
+    
+
+    
+function type(d) {
+  if (!d.value) return;
+  d.value = +d.value;
+  return d;
+}
+    
+function typet(d) {
+  if (!d.valuet) return;
+  d.valuet = +d.valuet;
+  return dt;
+}
+    
+
+</script>
